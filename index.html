@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Solid Links — تطبيق المشترك">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Solid Links">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Solid Links</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #F3F7FB;
+      overflow: hidden;
+    }
+    #splash {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: linear-gradient(180deg, #D9EFFA 0%, #F3F7FB 100%);
+      z-index: 9999;
+      transition: opacity .25s ease;
+    }
+    #splash img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+    }
+    #splash .title {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: #016AAA;
+    }
+    #splash .spinner {
+      width: 26px;
+      height: 26px;
+      border: 3px solid #E6EEF5;
+      border-top-color: #0397D9;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #splash.hide { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div id="splash">
+    <img src="icons/Icon-192.png" alt="Solid Links" />
+    <div class="title">Solid Links</div>
+    <div class="spinner"></div>
+  </div>
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // إخفاء شاشة التحميل عند ظهور واجهة Flutter
+    (function () {
+      const hide = () => {
+        const el = document.getElementById('splash');
+        if (!el || el.classList.contains('hide')) return;
+        el.classList.add('hide');
+        setTimeout(() => el.remove(), 280);
+      };
+      const watch = () => {
+        if (document.querySelector('flt-glass-pane, flutter-view, flt-scene-host')) {
+          hide();
+          return;
+        }
+        requestAnimationFrame(watch);
+      };
+      watch();
+      // احتياطي: أخفِ بعد 8 ثوانٍ حتى لو تأخر المحرك
+      setTimeout(hide, 8000);
+    })();
+  </script>
+</body>
+</html>
